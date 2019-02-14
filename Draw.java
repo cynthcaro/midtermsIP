@@ -6,7 +6,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.Random;
 
 public class Draw extends JComponent{
 
@@ -15,22 +14,26 @@ public class Draw extends JComponent{
 	public URL resource = getClass().getResource("run0.png");
 
 	// circle's position
-	public int x = 0;
-	public int y = 0;
-	public int height = 0;
-	public int width = 0;
+	public int x = 30;
+	public int y = 190;
 
 	// animation states
 	public int state = 0;
 
-	public Random randomizer;
-
-	public int NumberEnemy;
-	Monster[] monster = new Monster [10];
+	Monster monster1;
+	Monster monster2;
+	Monster monster3;
+	Monster monster4;
+	Monster monster5;
+	Monster monster6;
 
 	public Draw(){
-		randomizer = new Random();
-		spawnEnemy();
+		monster1 = new Monster(100, 200);
+		monster2 = new Monster(150, 200);
+		monster3 = new Monster(200, 200);
+		monster4 = new Monster(250, 200);
+		monster5 = new Monster(300, 200);
+		monster6 = new Monster(350, 200);
 
 		try{
 			image = ImageIO.read(resource);
@@ -39,41 +42,7 @@ public class Draw extends JComponent{
 		catch(IOException e){
 			e.printStackTrace();
 		}
-
-		height = image.getHeight();
-		width = image.getWidth();
-
-		GameStart();
 	}
-
-	public void GameStart(){
-		Thread gameThread = new Thread(new Runnable(){
-			public void run(){
-				while(true){
-					try{
-							for(int c = 0; c < monster.length; c++){
-								if(monster[c]!=null){
-									monster[c].moveTo(x,y);
-									repaint();
-								}
-							}
-							Thread.sleep(100);
-					} catch (InterruptedException e){
-								e.printStackTrace();
-					}
-				}
-			}
-		});
-		gameThread.start();
-	}
-
-	public void spawnEnemy(){
-		if(NumberEnemy < 11){
-			monster[NumberEnemy] = new Monster(randomizer.nextInt(500), randomizer.nextInt(500), this);
-			NumberEnemy++;
-	}
-}
-
 
 	public void reloadImage(){
 		state++;
@@ -124,20 +93,12 @@ public class Draw extends JComponent{
 						catch(IOException e){
 							e.printStackTrace();
 						}
-				    repaint();
-				    Thread.sleep(100);
+				        repaint();
+				        Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-
-				for(int x=0; x<monster.length; x++){
-					if(monster[x]!=null){
-						if(monster[x].contact){
-							monster[x].life = monster[x].life - 10;
-						}
-					}
-				}		
 			}
 		});
 		thread1.start();
@@ -170,47 +131,6 @@ public class Draw extends JComponent{
 		reloadImage();
 		repaint();
 	}
-
-	public void checkCollision(){
-		int xChecker = x + width;
-		int yChecker = y;
-
-		for(int x=0; x<monster.length; x++){
-			boolean collideX = false;
-			boolean collideY = false;
-
-			if(monster[x]!=null){
-				monster[x].contact = false;
-
-				if(yChecker > monster[x].yPos){
-					if(yChecker-monster[x].yPos < monster[x].height){
-						collideY = true;
-					}
-				}
-				else{
-					if(monster[x].yPos - yChecker < monster[x].height){
-						collideY = true;
-					}
-				}
-
-				if(xChecker > monster[x].xPos){
-					if(xChecker-monster[x].xPos < monster[x].width){
-						collideX = true;
-					}
-				}
-				else{
-					if(monster[x].xPos - xChecker < 5){
-						collideX = true;
-					}
-				}
-			}
-
-			if(collideX && collideY){
-				System.out.println("collision!");
-				monster[x].contact = true;
-			}
-		}
-	}
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -218,12 +138,11 @@ public class Draw extends JComponent{
 		g.drawImage(backgroundImage, 0, 0, this);
 		g.drawImage(image, x, y, this);
 
-	for(int c = 0; c < monster.length; c++){
-			if(monster[c]!=null){
-				g.drawImage(monster[c].image, monster[c].xPos, monster[c].yPos, this);
-				g.setColor(Color.GREEN);
-				g.fillRect(monsters[c].xPos+7, monster[c].yPos, monster[c].life, 2);
-			}
-		}
-	}	
+		g.drawImage(monster1.image, monster1.xPos, monster1.yPos, this);
+		g.drawImage(monster2.image, monster2.xPos, monster2.yPos, this);
+		g.drawImage(monster3.image, monster3.xPos, monster3.yPos, this);
+		g.drawImage(monster4.image, monster4.xPos, monster4.yPos, this);
+		g.drawImage(monster5.image, monster5.xPos, monster5.yPos, this);
+		g.drawImage(monster6.image, monster6.xPos, monster6.yPos, this);
+	}
 }

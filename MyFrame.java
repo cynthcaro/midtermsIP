@@ -4,11 +4,10 @@ import java.awt.event.KeyListener;
 
 public class MyFrame extends JFrame implements KeyListener{
 
-	private Draw drawing;
+	Draw drawing;
 
 	public MyFrame(){
 		this.drawing = new Draw();
-		addKeyListener(this);
 	}
 
 	public void keyPressed(KeyEvent e){
@@ -31,9 +30,6 @@ public class MyFrame extends JFrame implements KeyListener{
 		else if(e.getKeyCode() == KeyEvent.VK_SPACE){
 			drawing.attack();
 			System.out.println("attack");
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_S){
-			drawing.spawnEnemy();
 		}
 	}
 
